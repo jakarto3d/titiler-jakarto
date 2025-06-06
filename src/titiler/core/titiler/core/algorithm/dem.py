@@ -254,3 +254,29 @@ class TerrainRGB(BaseAlgorithm):
             crs=img.crs,
             bounds=img.bounds,
         )
+
+class Mask(BaseAlgorithm):
+    """Mask by value range."""
+
+    title: str = "Custom Range Mask"
+    description: str = "Mask values outside [min, max] range."
+    min: Optional[float] = Field(None)
+    max: Optional[float] = Field(None)
+
+    def __call__(self, img: ImageData) -> ImageData:
+        valid = numpy.ones_like(img.data, dtype=bool)
+        if self.min is not None:
+            valid &= img.data >= self.min
+        if self.max is not None:
+            valid &= img.data <= self.max
+
+        masked_data = numpy.where(valid, img.data, 0)
+        return ImageData(
+            numpy.ma.masked_array(masked_data, mask=~valid),
+            assets=img.assets,
+            crs=img.crs,
+            bounds=img.bounds,
+            band_names=img.band_names,
+            metadata=img.metadata,
+            cutline_mask=img.cutline_mask,
+        )

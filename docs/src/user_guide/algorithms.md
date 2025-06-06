@@ -6,6 +6,7 @@ The algorithms are meant to overcome the limitation of `expression` (using [nume
 
 We added a set of custom algorithms:
 
+- `mask`: Mask pixels based on a threshold (parameters: `min`, `max`).
 - `hillshade`: Create hillshade from elevation dataset (parameters: azimuth (45), angle_altitude(45))
 - `contours`: Create contours lines (raster) from elevation dataset (parameters: increment (35), thickness (1))
 - `slope`: Create degrees of slope from elevation dataset

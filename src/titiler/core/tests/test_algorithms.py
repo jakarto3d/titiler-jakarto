@@ -146,6 +146,22 @@ def test_normalized_index():
     numpy.testing.assert_almost_equal(out.array[0, 10, 10], 0.3333, decimal=3)
 
 
+def test_mask():
+    """test mask."""
+    algo = default_algorithms.get("mask")(min=1000, max=3000)
+
+    arr = numpy.random.randint(0, 5000, (1, 256, 256), dtype="uint16")
+    img = ImageData(arr)
+    out = algo(img)
+
+    assert out.array.shape == (1, 256, 256)
+    assert out.array.dtype == "uint16"
+    
+    mask_manual = (arr < 1000) | (arr > 3000)
+    numpy.testing.assert_array_equal(out.array.mask, mask_manual)
+    assert (out.array.data[mask_manual] == 0).all()
+
+
 def test_hillshade():
     """test hillshade."""
     algo = default_algorithms.get("hillshade")()
